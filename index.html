@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+
+<style>
+    body {
+  margin: 0;
+  padding-top: 400px;
+}
+
+#app {
+  height: 3000px;
+}
+.wrapper {
+  height: 2000px;
+  background-color: grey;
+  width: 100%;
+  margin-bottom: 400px;
+  opacity: 0;
+}
+
+.wrapper1 {
+  height: 2000px;
+  background-color: blue;
+  width: 100%;
+  opacity: 0;
+}
+</style>
+</head>
+<body>
+
+    <div class="" id="app">
+        <div class="wrapper animated" v-scroll="{animation:'fadeIn'}"></div>
+        <div class="wrapper1 animated" v-scroll="{animation: 'fadeIn'}"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        Vue.directive('scroll', {
+                inserted: function (el, binding) {
+                    //get the class we gave to the directive,  {animation :'classname'}
+                    let animationClass = binding.value.animation
+                    //pixels calculated from top of element when animation should start
+                    let offsetPixels = 300
+                    //run and check position
+                    let f = function (evt) {
+                            let pos = getPosition(el)
+                            let offsetTime = pos.y - offsetPixels
+                            if (window.pageYOffset > offsetTime) {
+                                el.classList.add(animationClass)
+                            }
+                    };
+                    //add event listener
+                    window.addEventListener('scroll', f);
+                    //get the position of the element
+                    function getPosition(element) {
+                        var xPosition = 0;
+                        var yPosition = 0;
+                        while (element) {
+                            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+                            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+                            element = element.offsetParent;
+                        }
+                        return { x: xPosition, y: yPosition };
+                    }
+                }
+            });
+
+
+            var app = new Vue({
+                el: '#app'
+            })
+
+    </script>
+</body>
+</html>
